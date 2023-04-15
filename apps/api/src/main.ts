@@ -9,7 +9,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { QuestionManagementConfig } from './app/question-management/question-management.config';
-import {UsersConfig} from "./app/users/users.config";
+import { UsersConfig } from './app/users/users.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

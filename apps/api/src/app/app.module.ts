@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { QuestionManagementModule } from './question-management/question-management.module';
-import {UsersModule} from "./users/users.module";
+import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 

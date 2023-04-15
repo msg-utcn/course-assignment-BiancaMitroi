@@ -6,18 +6,18 @@ import {
 } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import {UserModel} from "./model/user.model";
-import {Repository} from "typeorm";
-import {RegisterUserDto} from "./dtos/register-user.dto";
-import {UserDto} from "./dtos/user.dto";
-import {UserMapper} from "./mapper/user.mapper";
-import {QuestionMapper} from "../question-management/mappers/question.mapper";
+import { UserModel } from './model/user.model';
+import { Repository } from 'typeorm';
+import { RegisterUserDto } from './dtos/register-user.dto';
+import { UserDto } from './dtos/user.dto';
+import { UserMapper } from './mapper/user.mapper';
 
 @Injectable()
-export class UsersService{
-
-  constructor(@InjectRepository(UserModel)
-              private userModelRepository: Repository<UserModel>){}
+export class UsersService {
+  constructor(
+    @InjectRepository(UserModel)
+    private userModelRepository: Repository<UserModel>
+  ) {}
 
   async registerUser(dto: RegisterUserDto): Promise<UserDto> {
     const model = UserMapper.mapRegisterToModel(dto);
@@ -30,7 +30,7 @@ export class UsersService{
     }
   }
 
-  async getUserById(id: string): Promise<UserDto>{
+  async getUserById(id: string): Promise<UserDto> {
     const foundModel = await this.userModelRepository.findOne({
       where: { id },
     });
@@ -40,7 +40,7 @@ export class UsersService{
     return UserMapper.mapToDto(foundModel);
   }
 
-  async getUserByEmail(email: string): Promise<UserDto>{
+  async getUserByEmail(email: string): Promise<UserDto> {
     const foundModel = await this.userModelRepository.findOne({
       where: { email },
     });
@@ -50,12 +50,11 @@ export class UsersService{
     return UserMapper.mapToDto(foundModel);
   }
 
-  async getUsers(): Promise<UserDto[]>{
+  async getUsers(): Promise<UserDto[]> {
     const foundModels = await this.userModelRepository.find();
     if (!foundModels) {
       return [];
     }
     return foundModels.map((model) => UserMapper.mapToDto(model));
   }
-
 }
