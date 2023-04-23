@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 export class UpdateQuestionDto {
+  @IsNotEmpty()
   @ApiProperty({
     description: 'The title of the question',
     example: 'What is a promise in JavaScript?',
@@ -8,6 +10,7 @@ export class UpdateQuestionDto {
   })
   title: string;
 
+  @IsNotEmpty()
   @ApiProperty({
     description: 'The content of the question',
     example: 'What is a promise in JavaScript?',
