@@ -1,7 +1,7 @@
-import { CreateAnswerDto } from '../dto/create-answer.dto';
-import { AnswerModel } from '../model/answer.model';
-import { UpdateAnswerDto } from '../dto/update-answer.dto';
-import { AnswerDto } from '../dto/answer.dto';
+import { CreateAnswerDto } from '../dtos/create-answer.dto';
+import { AnswerModel } from '../models/answer.model';
+import { UpdateAnswerDto } from '../dtos/update-answer.dto';
+import { AnswerDto } from '../dtos/answer.dto';
 
 export class AnswerMapper {
   static mapCreateAnswerToModel(dto: CreateAnswerDto): AnswerModel {

@@ -27,7 +27,6 @@ import { AnswerModule } from './answers/answer.module';
     QuestionManagementModule,
     UsersModule,
     AuthModule,
-    AnswerModule,
   ],
   controllers: [],
   providers: [],
