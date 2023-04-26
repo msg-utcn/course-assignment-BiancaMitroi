@@ -20,7 +20,7 @@ export class UsersService {
   ) {}
 
   async registerUser(dto: RegisterUserDto): Promise<UserDto> {
-    const model = UserMapper.mapRegisterToModel(dto);
+    const model = await UserMapper.mapRegisterToModel(dto);
     try {
       const savedModel = await this.userModelRepository.save(model);
       return UserMapper.mapToDto(savedModel);

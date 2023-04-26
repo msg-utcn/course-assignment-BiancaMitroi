@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { AnswerModule } from './answers/answer.module';
 
 @Module({
   imports: [
@@ -27,7 +26,6 @@ import { AnswerModule } from './answers/answer.module';
     QuestionManagementModule,
     UsersModule,
     AuthModule,
-    AnswerModule,
   ],
   controllers: [],
   providers: [],

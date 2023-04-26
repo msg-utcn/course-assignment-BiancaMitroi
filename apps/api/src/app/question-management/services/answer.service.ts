@@ -5,12 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AnswerModel } from './model/answer.model';
+import { AnswerModel } from '../models/answer.model';
 import { Repository } from 'typeorm';
-import { AnswerDto } from './dto/answer.dto';
-import { AnswerMapper } from './mapper/answer.mapper';
-import { CreateAnswerDto } from './dto/create-answer.dto';
-import { UpdateAnswerDto } from './dto/update-answer.dto';
+import { AnswerDto } from '../dtos/answer.dto';
+import { AnswerMapper } from '../mappers/answer.mapper';
+import { CreateAnswerDto } from '../dtos/create-answer.dto';
+import { UpdateAnswerDto } from '../dtos/update-answer.dto';
 
 @Injectable()
 export class AnswerService {
