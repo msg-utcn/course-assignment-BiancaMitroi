@@ -1,43 +1,34 @@
-# Week 5
-
-**NOTE:** Added the steps we implemented in the presentation in [Docs/Authentication](./docs/add-authentication.md) (Reading)
-- Do a reading of the steps and of the extra materials added  
+# Week 6
 
 ## Setting Up 
 
 - Merge the MR with the assignment from the previous week
-- Continue from your repository `main` branch
+- Continue from your repository `main` branch (take care you have the latest changes before you start to work `git fetch`, `git pull` on the `main` branch)
 
 ## Assignment
 
-- Get up-to-date with the authentication and users
-  - Have the Users module implemented
-  - Have the authentication implemented
-- Create an answer model
-```typescript
-export class AnswerModel {
-  id?: string;    
-  content: string;
-  rating?: number;
-  creationDate: Date;
-}
-```
-- Create some DTO's for `CreateAnswer` and `UpdateAnswer` similar in nature to how the `Question` was implemented
-  - Annotate them with Swagger descriptions
-- Expose in the `question-management.controller` endpoints for `Delete`, `Create`, and `Update`
-  - It should be under `question-management/answers`
-- Annotate the `question-management.controller` with the `UseGuards(JwtAuthGuard)`
-- Test the application that it works
+- Get up to date with week 6 materials
+  - Have the previous week functionality (authentication, etc) 
+  - Have the one-to-many relation between question and answers
+  - Have the one-to-many relation between question and user
+  - Have the one-to-many relation between answer and question
+  - Have the services and controller functionality implemented
+  - Call me if you have any problems (send me a message on discord and we will sync)
+  - Open a Pull-Request with all your functionality and let me review it
 
 ## Bonus Assignment (Optional)
 
-This is a bonus assignment for those who have a little time. The idea behind it is to add validations to our dto's to ensure the user doesn't send malformed data.
+This is a bonus assignment for those who have a little time. 
+
+The idea behind is to add authorization to our application such that only `Admin` users can remove question and answers. 
+We will implement a RBAC (Role-based access control) to define who can access what route.
 
 ### Reading
-- [NestJS Validations](https://docs.nestjs.com/techniques/validation)
-- [NestJS Pipes](https://docs.nestjs.com/pipes)
+- [NestJS Authorization](https://docs.nestjs.com/security/authorization)
 
 ### Assignment
-- Install the dependencies `npm i --save class-validator class-transformer`
-- Go through each of the application Input(Create, Update) DTO's and add validations that make sense for you (IsNumber, IsString, IsEmail, etc)
-- Set the application in `main.ts` to use the validators globally
+- Follow the reading material for the Basic RBAC implementation
+- Create a role decorator named `Roles`
+- Create a `RolesGuard` which checks the user roles for the decorator role
+- Add `RolesGuard` to the `UseGuards` annotation in the `QuestionManagementController`
+- Add your created decorator `Roles` to the `Delete` requests in the `QuestionManagementController`

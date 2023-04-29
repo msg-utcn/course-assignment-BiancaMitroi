@@ -1,6 +1,6 @@
-import { QuestionTopic } from '../models/question-topic';
+import { QuestionTopic } from '../model/question-topic';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import {IsNotEmpty} from "class-validator";
 
 export class CreateQuestionDto {
   @IsNotEmpty()
@@ -11,6 +11,13 @@ export class CreateQuestionDto {
   })
   title: string;
 
+  @ApiProperty({
+    description: 'The UUID of the User who posted the question',
+    example: '238d8271-33cd-4c31-ab6a-58fc9df30a5e',
+    required: true,
+  })
+  postedBy: string;
+
   @IsNotEmpty()
   @ApiProperty({
     description: 'The content of the question',
@@ -19,6 +26,7 @@ export class CreateQuestionDto {
   })
   content: string;
 
+  @IsNotEmpty()
   @ApiProperty({
     description: 'The topic of the question',
     enum: QuestionTopic,
