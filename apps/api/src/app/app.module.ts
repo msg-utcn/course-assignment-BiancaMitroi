@@ -4,8 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import {RolesGuard} from "./users/models/role.guard";
-import {APP_GUARD} from "@nestjs/core";
 
 @Module({
   imports: [

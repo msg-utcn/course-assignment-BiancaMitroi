@@ -6,8 +6,6 @@ import { AnswerService } from './services/answer.service';
 import { AnswerModel } from './model/answer.model';
 import { QuestionService } from './services/question.service';
 import { UsersModule } from '../users/users.module';
-import {APP_GUARD} from "@nestjs/core";
-import {RolesGuard} from "../users/models/role.guard";
 
 @Module({
   imports: [

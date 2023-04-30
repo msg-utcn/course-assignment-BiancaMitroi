@@ -1,19 +1,29 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards,} from '@nestjs/common';
-import {QuestionDto} from './dtos/question.dto';
-import {CreateQuestionDto} from './dtos/create-question.dto';
-import {UpdateQuestionDto} from './dtos/update-question.dto';
-import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
-import {QuestionManagementConfig} from './question-management.config';
-import {ApiImplicitParam} from '@nestjs/swagger/dist/decorators/api-implicit-param.decorator';
-import {AnswerDto} from './dtos/answer.dto';
-import {UpdateAnswerDto} from './dtos/update-answer.dto';
-import {CreateAnswerDto} from './dtos/create-answer.dto';
-import {QuestionService} from './services/question.service';
-import {AnswerService} from './services/answer.service';
-import {JwtAuthGuard} from '../auth/guards/jwt-auth.guard';
-import {Roles} from "../users/models/role.decorator";
-import {UserRole} from "../users/models/user-role.model";
-import {RolesGuard} from "../users/models/role.guard";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import { QuestionDto } from './dtos/question.dto';
+import { CreateQuestionDto } from './dtos/create-question.dto';
+import { UpdateQuestionDto } from './dtos/update-question.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { QuestionManagementConfig } from './question-management.config';
+import { ApiImplicitParam } from '@nestjs/swagger/dist/decorators/api-implicit-param.decorator';
+import { AnswerDto } from './dtos/answer.dto';
+import { UpdateAnswerDto } from './dtos/update-answer.dto';
+import { CreateAnswerDto } from './dtos/create-answer.dto';
+import { QuestionService } from './services/question.service';
+import { AnswerService } from './services/answer.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Roles } from '../users/models/role.decorator';
+import { UserRole } from '../users/models/user-role.model';
+import { RolesGuard } from '../users/models/role.guard';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
