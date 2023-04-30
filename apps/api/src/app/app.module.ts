@@ -30,9 +30,6 @@ import {APP_GUARD} from "@nestjs/core";
     AuthModule,
   ],
   controllers: [],
-  providers: [{
-    provide: APP_GUARD,
-    useClass: RolesGuard,
-  }],
+  providers: [],
 })
 export class AppModule {}

@@ -41,16 +41,16 @@ export class QuestionManagementController {
   }
 
   @Patch(':id')
-  @Roles(UserRole.ADMIN)
-  async deleteQuestion(
+  async updateQuestion(
     @Param('id') id: string,
     @Body() dto: UpdateQuestionDto
   ): Promise<QuestionDto> {
     return this.questionService.update(id, dto);
   }
 
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
-  async updateQuestion(@Param('id') id: string): Promise<void> {
+  async deleteQuestion(@Param('id') id: string): Promise<void> {
     return this.questionService.delete(id);
   }
 
