@@ -11,6 +11,7 @@ import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 @Controller(UsersConfig.API_ROUTE)
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<UserDto> {
     return this.usersService.getUserById(id);

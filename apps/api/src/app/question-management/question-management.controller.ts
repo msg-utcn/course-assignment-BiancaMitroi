@@ -6,22 +6,27 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { QuestionDto } from './dtos/question.dto';
-import { QuestionService } from './services/question.service';
 import { CreateQuestionDto } from './dtos/create-question.dto';
 import { UpdateQuestionDto } from './dtos/update-question.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { QuestionManagementConfig } from './question-management.config';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiImplicitParam } from '@nestjs/swagger/dist/decorators/api-implicit-param.decorator';
 import { AnswerDto } from './dtos/answer.dto';
-import { CreateAnswerDto } from './dtos/create-answer.dto';
 import { UpdateAnswerDto } from './dtos/update-answer.dto';
+import { CreateAnswerDto } from './dtos/create-answer.dto';
+import { QuestionService } from './services/question.service';
 import { AnswerService } from './services/answer.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Roles } from '../users/models/role.decorator';
+import { UserRole } from '../users/models/user-role.model';
+import { RolesGuard } from '../users/models/role.guard';
 
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags(QuestionManagementConfig.SWAGGER_FEATURE)
 @Controller(QuestionManagementConfig.API_ROUTE)
 export class QuestionManagementController {
@@ -29,11 +34,6 @@ export class QuestionManagementController {
     private questionService: QuestionService,
     private answerService: AnswerService
   ) {}
-
-  @Get('answers')
-  async getAllAnswers(): Promise<AnswerDto[]> {
-    return this.answerService.readAll();
-  }
 
   @Get()
   async getAllQuestions(): Promise<QuestionDto[]> {
@@ -45,22 +45,9 @@ export class QuestionManagementController {
     return this.questionService.readById(id);
   }
 
-  @Post('answers')
-  async createAnswer(@Body() dto: CreateAnswerDto): Promise<AnswerDto> {
-    return this.answerService.create(dto);
-  }
-
   @Post()
   async createQuestion(@Body() dto: CreateQuestionDto): Promise<QuestionDto> {
     return this.questionService.create(dto);
-  }
-
-  @Patch('answers/:id')
-  async updateAnswer(
-    @Param('id') id: string,
-    @Body() dto: UpdateAnswerDto
-  ): Promise<AnswerDto> {
-    return this.answerService.update(id, dto);
   }
 
   @Patch(':id')
@@ -71,13 +58,40 @@ export class QuestionManagementController {
     return this.questionService.update(id, dto);
   }
 
-  @Delete('answers/:id')
-  async deleteAnswer(@Param('id') id: string): Promise<void> {
-    return this.answerService.delete(id);
-  }
-
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   async deleteQuestion(@Param('id') id: string): Promise<void> {
     return this.questionService.delete(id);
+  }
+
+  @Get(':questionId/answers')
+  async getAllAnswers(
+    @Param('questionId') questionId: string
+  ): Promise<AnswerDto[]> {
+    return this.answerService.readAllByQuestionId(questionId);
+  }
+
+  @Post(':questionId/answers')
+  async addAnswer(
+    @Body() answerDto: CreateAnswerDto,
+    @Param('questionId') questionId: string
+  ): Promise<AnswerDto> {
+    return this.answerService.addAnswer(questionId, answerDto);
+  }
+
+  @ApiImplicitParam({ name: 'answerId', type: String })
+  @Put(':questionId/answers/:answerId')
+  async updateAnswer(
+    @Body() answerDto: UpdateAnswerDto,
+    @Param('answerId') answerId
+  ): Promise<AnswerDto> {
+    return this.answerService.update(answerId, answerDto);
+  }
+
+  @Roles(UserRole.ADMIN)
+  @ApiImplicitParam({ name: 'answerId', type: String })
+  @Delete(':questionId/answers/:answerId')
+  async deleteAnswer(@Param('answerId') answerId: string): Promise<void> {
+    return this.answerService.delete(answerId);
   }
 }

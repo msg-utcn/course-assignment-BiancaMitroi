@@ -1,53 +1,83 @@
 import {
   BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AnswerModel } from '../models/answer.model';
 import { Repository } from 'typeorm';
-import { AnswerDto } from '../dtos/answer.dto';
 import { AnswerMapper } from '../mappers/answer.mapper';
+import { QuestionModel } from '../model/question.model';
+import { AnswerModel } from '../model/answer.model';
 import { CreateAnswerDto } from '../dtos/create-answer.dto';
+import { AnswerDto } from '../dtos/answer.dto';
 import { UpdateAnswerDto } from '../dtos/update-answer.dto';
+import { UserModel } from '../../users/models/user.model';
 
 @Injectable()
 export class AnswerService {
   constructor(
     @InjectRepository(AnswerModel)
-    private answerModelRepository: Repository<AnswerModel>
+    private answerModelRepository: Repository<AnswerModel>,
+    @InjectRepository(QuestionModel)
+    private questionModelRepository: Repository<QuestionModel>,
+    @InjectRepository(UserModel)
+    private userModelRepository: Repository<UserModel>
   ) {}
 
-  async readAll(): Promise<AnswerDto[]> {
-    const foundModels = await this.answerModelRepository.find();
+  async addAnswer(
+    questionId: string,
+    dto: CreateAnswerDto
+  ): Promise<AnswerDto> {
+    const foundQuestion = await this.questionModelRepository.findOneBy({
+      id: questionId,
+    });
+    if (!foundQuestion) {
+      throw new BadRequestException();
+    }
+    const foundUser = await this.userModelRepository.findOneBy({
+      id: dto.postedBy,
+    });
+    if (!foundUser) {
+      throw new NotFoundException();
+    }
+    try {
+      const mappedModel = AnswerMapper.mapCreateDtoToModel(
+        dto,
+        foundQuestion,
+        foundUser
+      );
+      const savedModel = await this.answerModelRepository.save(mappedModel);
+      return AnswerMapper.mapToDto(savedModel);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async readAllByQuestionId(questionId: string): Promise<AnswerDto[]> {
+    const foundModels = await this.answerModelRepository.find({
+      where: { parent: { id: questionId } },
+      relations: ['postedBy', 'parent'],
+    });
     if (!foundModels) {
       return [];
     }
     return foundModels.map((model) => AnswerMapper.mapToDto(model));
   }
 
-  async create(dto: CreateAnswerDto): Promise<AnswerDto> {
-    const model = AnswerMapper.mapCreateAnswerToModel(dto);
-    try {
-      const savedModel = await this.answerModelRepository.save(model);
-      return AnswerMapper.mapToDto(savedModel);
-    } catch (error) {
-      Logger.log(error, 'AnswerService.create');
-      throw new BadRequestException();
-    }
-  }
-
   async update(id: string, dto: UpdateAnswerDto): Promise<AnswerDto> {
-    const foundModel = await this.readModelById(id);
-    const updatedModel = AnswerMapper.mapUpdateAnswerToModel(dto, foundModel);
-
+    const foundAnswer = await this.answerModelRepository.findOne({
+      where: { id },
+      relations: ['postedBy', 'parent'],
+    });
+    if (!foundAnswer) {
+      throw new NotFoundException();
+    }
     try {
-      const savedModel = await this.answerModelRepository.save(updatedModel);
+      const mappedModel = AnswerMapper.mapUpdateDtoToModel(dto, foundAnswer);
+      const savedModel = await this.answerModelRepository.save(mappedModel);
       return AnswerMapper.mapToDto(savedModel);
     } catch (error) {
-      Logger.log(error, 'AnswerService.update');
-      throw new BadRequestException();
+      throw new BadRequestException(error);
     }
   }
 
@@ -56,15 +86,5 @@ export class AnswerService {
     if (deleteResult.affected === 0) {
       throw new BadRequestException();
     }
-  }
-
-  private async readModelById(id: string): Promise<AnswerModel> {
-    const foundModel = await this.answerModelRepository.findOne({
-      where: { id },
-    });
-    if (!foundModel) {
-      throw new NotFoundException();
-    }
-    return foundModel;
   }
 }

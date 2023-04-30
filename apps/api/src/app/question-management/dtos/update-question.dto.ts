@@ -5,7 +5,7 @@ export class UpdateQuestionDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'The title of the question',
-    example: 'What is a promise in JavaScript?',
+    example: 'How does the Event Loop work in the Browser?',
     required: false,
   })
   title: string;
@@ -13,7 +13,7 @@ export class UpdateQuestionDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'The content of the question',
-    example: 'What is a promise in JavaScript?',
+    example: 'How does the Event Loop work in the Browser?',
     required: true,
   })
   content: string;
